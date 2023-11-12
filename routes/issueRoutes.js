@@ -26,6 +26,15 @@ router.post('/api/issues', async (req, res) => {
   }
 });
 
+router.get('/api/issues', async (req, res) => {
+  try {
+    const issues = await Issue.find();
+    res.send(issues);
+  } catch (error) {
+    res.status(500).send('Failed to retrieve issues');
+  }
+});
+
 router.put('/api/issues/:id/status', async (req, res) => {
   try {
     const { error } = Joi.object({ status: Joi.string().valid('pending', 'acknowledged', 'in-progress', 'resolved') }).validate(req.body);
