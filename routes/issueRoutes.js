@@ -36,6 +36,7 @@ router.get('/api/issues', async (req, res) => {
   }
 });
 
+
 router.put('/api/issues/:id/status', async (req, res) => {
   try {
     const { error } = Joi.object({ status: Joi.string().valid('pending', 'acknowledged', 'in-progress', 'resolved') }).validate(req.body);
