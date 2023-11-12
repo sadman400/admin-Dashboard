@@ -17,7 +17,6 @@ router.post('/api/issues', async (req, res) => {
       image,
       location,
       status: 'pending',
-      department: null,
     });
 
     await newIssue.save();

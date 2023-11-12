@@ -1,3 +1,4 @@
+// validators/issueValidator.js
 const Joi = require('joi');
 
 function validateIssue(issue) {
@@ -6,6 +7,7 @@ function validateIssue(issue) {
     category: Joi.string().required(),
     image: Joi.string().required(),
     location: Joi.string().required(),
+    status: Joi.string().valid('pending', 'acknowledged', 'in-progress', 'resolved').required(),
   });
 
   return schema.validate(issue);
