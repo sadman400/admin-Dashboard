@@ -7,6 +7,7 @@ function validateIssue(issue) {
     category: Joi.string().required(),
     image: Joi.string().required(),
     location: Joi.string().required(),
+    userId: Joi.string().required(),
     status: Joi.string().valid('pending', 'acknowledged', 'in-progress', 'resolved').required(),
   });
 

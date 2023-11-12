@@ -6,7 +6,7 @@ const issueSchema = new mongoose.Schema({
   image: String,
   location: String,
   status: String,
-  // department: String,
+  userId:String
 });
 
 const Issue = mongoose.model('Issue', issueSchema);
