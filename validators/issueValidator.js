@@ -6,9 +6,8 @@ function validateIssue(issue) {
     description: Joi.string().required(),
     category: Joi.string().required(),
     image: Joi.string().required(),
-    location: Joi.string().required(),
-    userId: Joi.string().required(),
-    status: Joi.string().valid('pending', 'acknowledged', 'in-progress', 'resolved').required(),
+    name: Joi.string().required(),
+    email:Joi.string().required()
   });
 
   return schema.validate(issue);

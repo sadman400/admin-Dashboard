@@ -5,8 +5,8 @@ const issueSchema = new mongoose.Schema({
   category: String,
   image: String,
   location: String,
-  status: String,
-  userId:String
+  name:String,
+  email:String
 });
 
 const Issue = mongoose.model('Issue', issueSchema);
