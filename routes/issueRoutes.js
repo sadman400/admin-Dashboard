@@ -9,7 +9,7 @@ router.post('/api/issues', async (req, res) => {
     const { error } = validateIssue(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const { description, category, image,name,email} = req.body;
+    const { description, category, image,name,email,userId} = req.body;
 
     const newIssue = new Issue({
       description,
@@ -17,6 +17,7 @@ router.post('/api/issues', async (req, res) => {
       name,
       email,
       image,
+      userId,
       status: 'pending',
     });
 

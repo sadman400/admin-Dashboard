@@ -7,7 +7,8 @@ function validateIssue(issue) {
     category: Joi.string().required(),
     image: Joi.string().required(),
     name: Joi.string().required(),
-    email:Joi.string().required()
+    email:Joi.string().required(),
+    userId:Joi.string().required()
   });
 
   return schema.validate(issue);
