@@ -26,7 +26,17 @@ router.post('/api/users', async (req, res) => {
 
 router.get('/api/users', async (req, res) => {
   try {
-    const users = await User.find();
+
+    const { email, name } = req.query;
+    const query = {};
+    if (email) {
+      query.email = email;
+    }
+    if (name) {
+      query.name = name;
+    }
+    
+    const users = await User.find({email, name});
     res.send(users);
   } catch (error) {
     res.status(500).send('Failed to retrieve users');
