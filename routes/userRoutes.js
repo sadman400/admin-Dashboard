@@ -36,7 +36,7 @@ router.get('/api/users', async (req, res) => {
       query.name = name;
     }
     
-    const users = await User.find({email, name});
+    const users = await User.find(query);
     res.send(users);
   } catch (error) {
     res.status(500).send('Failed to retrieve users');
