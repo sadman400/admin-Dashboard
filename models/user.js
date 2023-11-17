@@ -1,6 +1,14 @@
 // models/user.js
 const mongoose = require('mongoose');
 
+const replySchema = new mongoose.Schema({
+  message: String,
+  timestamp: {
+    type: Date,
+    default: Date.now
+  }
+})
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -10,6 +18,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  user_replies: [replySchema]
 });
 
 const User = mongoose.model('User', userSchema);

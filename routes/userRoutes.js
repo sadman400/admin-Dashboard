@@ -5,6 +5,8 @@ const validateUser = require('../validators/userValidator')
 
 const router = express.Router();
 
+
+// POST A USER 
 router.post('/api/users', async (req, res) => {
   try {
     const { error } = validateUser(req.body);
@@ -24,6 +26,36 @@ router.post('/api/users', async (req, res) => {
   }
 });
 
+
+
+// REPLY AS USER
+router.post('/api/users/:id/reply', async (req, res) => {
+
+  try {
+    
+    const { reply } = req.body;
+
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    user.user_replies.push({message: reply, timestamp: new Date().toISOString()});
+    
+    await user.save();
+    res.send(user);
+
+  } catch (error) {
+    return res.status(500).send('Failed to reply to the user');
+  }
+
+});
+
+
+
+
+// GET A USER 
 router.get('/api/users', async (req, res) => {
   try {
 

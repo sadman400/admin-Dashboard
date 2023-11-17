@@ -4,6 +4,8 @@ const validateIssue = require('../validators/issueValidator');
 
 const router = express.Router();
 
+
+// POST AN ISSUE 
 router.post('/api/issues', async (req, res) => {
   try {
     const { error } = validateIssue(req.body);
@@ -28,6 +30,10 @@ router.post('/api/issues', async (req, res) => {
   }
 });
 
+
+
+
+// GET AN ISSUE
 router.get('/api/issues', async (req, res) => {
   try {
     const issues = await Issue.find();
@@ -37,7 +43,10 @@ router.get('/api/issues', async (req, res) => {
   }
 });
 
-// single get issues
+
+
+
+// GET SINGLE ISSUE
 router.get('/api/issues/:id', async (req, res) => {
   try {
     const issue = await Issue.findById(req.params.id);
@@ -53,6 +62,33 @@ router.get('/api/issues/:id', async (req, res) => {
 })
 
 
+
+
+// REPLY BY ID 
+router.post('/api/issues/:id/reply', async (req, res) => {
+  try {
+    const { reply } = req.body;
+
+    const issue = await Issue.findById(req.params.id);
+
+    if (!issue) {
+      return res.status(404).send('Issue not found');
+    }
+
+    issue.admin_replies.push({ message: reply, timestamp: new Date().toISOString() });
+    
+    await issue.save();
+
+    res.send(issue);
+  } catch (error) {
+    res.status(500).send('Failed to reply to the issue');
+  }
+});
+
+
+
+
+// UPDATE ISSUE 
 router.put('/api/issues/:id/status', async (req, res) => {
   try {
     const { error } = Joi.object({ status: Joi.string().valid('pending', 'acknowledged', 'in-progress', 'resolved') }).validate(req.body);
@@ -67,6 +103,9 @@ router.put('/api/issues/:id/status', async (req, res) => {
   }
 });
 
+
+
+// COMMUNICATION WITH USER 
 router.post('/api/communication', async (req, res) => {
   try {
     const { issueId, sender, receiver, message } = req.body;
@@ -80,6 +119,9 @@ router.post('/api/communication', async (req, res) => {
 });
 
 
+
+
+// DELETE AN ISSUE 
 router.delete('/api/issues/:id', async (req, res) => {
   try {
     const issue = await Issue.findByIdAndDelete(req.params.id);
