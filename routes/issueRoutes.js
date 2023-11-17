@@ -64,4 +64,16 @@ router.post('/api/communication', async (req, res) => {
   }
 });
 
+
+router.delete('/api/issues/:id', async (req, res) => {
+  try {
+    const issue = await Issue.findByIdAndDelete(req.params.id);
+
+    if (!issue) return res.status(404).send('Issue not found');
+    res.send(issue);
+  } catch (error) {
+    res.status(500).send('Failed to delete issue');
+  }
+});
+
 module.exports = router;
