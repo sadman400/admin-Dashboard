@@ -37,6 +37,21 @@ router.get('/api/issues', async (req, res) => {
   }
 });
 
+// single get issues
+router.get('/api/issues/:id', async (req, res) => {
+  try {
+    const issue = await Issue.findById(req.params.id);
+
+    if (!issue) {
+      return res.status(404).send('Issue not found');
+    }
+
+    res.send(issue);
+  } catch (error) {
+    res.status(500).send('Failed to get the issues');
+  }
+})
+
 
 router.put('/api/issues/:id/status', async (req, res) => {
   try {
