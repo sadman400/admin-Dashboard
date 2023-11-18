@@ -10,7 +10,7 @@ router.post('/api/issues', async (req, res) => {
   try {
     const { error } = validateIssue(req.body);
     if (error) return res.status(400).send(error.details[0].message);
-
+    
     const { description, category, image,name,email,userId} = req.body;
 
     const newIssue = new Issue({
@@ -76,7 +76,8 @@ router.post('/api/issues/:id/reply', async (req, res) => {
     }
 
     issue.admin_replies.push({ message: reply, timestamp: new Date().toISOString() });
-    
+    user.status = 'active';
+
     await issue.save();
 
     res.send(issue);
