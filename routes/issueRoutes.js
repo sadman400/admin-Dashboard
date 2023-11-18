@@ -75,14 +75,13 @@ router.post('/api/issues/:id/reply', async (req, res) => {
       return res.status(404).send('Issue not found');
     }
 
-    issue.admin_replies.push({ message: reply, timestamp: new Date().toISOString() });
-    // user.status = 'active';
-
-    if (status) {
-      issue.status = status;
+    if (reply) {
+      issue.replies.push({ message: reply, timestamp: new Date().toISOString() });
+      issue.status = 'active';
     } else {
-      issue.status = 'active'
+      issue.status = 'pending';
     }
+    
 
     await issue.save();
 
