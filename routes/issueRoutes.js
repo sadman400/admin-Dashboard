@@ -1,6 +1,8 @@
 const express = require('express');
 const Issue = require('../models/issue');
+const User = require('../models/user');
 const validateIssue = require('../validators/issueValidator');
+const Joi = require('joi');
 
 const router = express.Router();
 
@@ -67,29 +69,43 @@ router.get('/api/issues/:id', async (req, res) => {
 // REPLY BY ID 
 router.post('/api/issues/:id/reply', async (req, res) => {
   try {
-    const { reply, status } = req.body;
+    const { reply } = req.body;
 
-    const issue = await Issue.findById(req.params.id);
+    // Useing findOneAndUpdate 
+    const issue = await Issue.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $push: {
+          admin_replies: {
+            message: reply,
+            timestamp: new Date().toISOString(),
+            userId: req.body.userId,
+          },
+        },
+        $set: { status: 'active' },
+      },
+      { new: true }
+    );
 
     if (!issue) {
       return res.status(404).send('Issue not found');
     }
 
-    if (reply) {
-      issue.replies.push({ message: reply, timestamp: new Date().toISOString() });
-      issue.status = 'active';
-    } else {
-      issue.status = 'pending';
+    const user = await User.findById(issue.userId);
+    if (user) {
+      user.user_replies = user.user_replies || [];
+      user.user_replies.push({ message: reply, timestamp: new Date().toISOString(), issueId: issue._id });
+      await user.save();
     }
-    
-
-    await issue.save();
 
     res.send(issue);
   } catch (error) {
-    res.status(500).send('Failed to reply to the issue');
+    res.status(500).send(`Failed to reply to the issue: ${error.message}`);
   }
 });
+
+
+
 
 
 
