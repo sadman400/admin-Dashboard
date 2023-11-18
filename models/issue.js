@@ -15,7 +15,11 @@ const issueSchema = new mongoose.Schema({
   name: String,
   email: String,
   userId: String,
-  status: String,
+  status: {
+    type: String,
+    enum: ['active', 'pending'],
+    default: 'pending',
+  },
   admin_replies: [replySchema] // Array of reply objects
 });
 

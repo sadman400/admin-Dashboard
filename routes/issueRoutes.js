@@ -67,7 +67,7 @@ router.get('/api/issues/:id', async (req, res) => {
 // REPLY BY ID 
 router.post('/api/issues/:id/reply', async (req, res) => {
   try {
-    const { reply } = req.body;
+    const { reply, status } = req.body;
 
     const issue = await Issue.findById(req.params.id);
 
@@ -76,7 +76,13 @@ router.post('/api/issues/:id/reply', async (req, res) => {
     }
 
     issue.admin_replies.push({ message: reply, timestamp: new Date().toISOString() });
-    user.status = 'active';
+    // user.status = 'active';
+
+    if (status) {
+      issue.status = status;
+    } else {
+      issue.status = 'active'
+    }
 
     await issue.save();
 
