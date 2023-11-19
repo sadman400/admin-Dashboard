@@ -30,10 +30,8 @@ router.post('/api/users', async (req, res) => {
 
 // REPLY AS USER
 router.post('/api/users/:id/reply', async (req, res) => {
-
   try {
-    
-    const { reply } = req.body;
+    const { reply, question } = req.body; // Updated variable names
 
     const user = await User.findById(req.params.id);
 
@@ -41,15 +39,17 @@ router.post('/api/users/:id/reply', async (req, res) => {
       return res.status(404).send('User not found');
     }
 
-    user.user_replies.push({message: reply, timestamp: new Date().toISOString()});
-    
+    user.user_replies.push({
+      ans: reply, // Change from 'message' to 'ans'
+      question: question, // Add question field
+      timestamp: new Date().toISOString()
+    });
+
     await user.save();
     res.send(user);
-
   } catch (error) {
     return res.status(500).send('Failed to reply to the user');
   }
-
 });
 
 

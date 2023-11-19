@@ -69,15 +69,16 @@ router.get('/api/issues/:id', async (req, res) => {
 // REPLY BY ID 
 router.post('/api/issues/:id/reply', async (req, res) => {
   try {
-    const { reply } = req.body;
+    const { reply, question } = req.body;
 
-    // Useing findOneAndUpdate 
+    // Using findOneAndUpdate 
     const issue = await Issue.findOneAndUpdate(
       { _id: req.params.id },
       {
         $push: {
           admin_replies: {
-            message: reply,
+            ans: reply,
+            question: question, // Add description field
             timestamp: new Date().toISOString(),
             userId: req.body.userId,
           },
@@ -94,7 +95,12 @@ router.post('/api/issues/:id/reply', async (req, res) => {
     const user = await User.findById(issue.userId);
     if (user) {
       user.user_replies = user.user_replies || [];
-      user.user_replies.push({ message: reply, timestamp: new Date().toISOString(), issueId: issue._id });
+      user.user_replies.push({
+        ans: reply,
+        question: question, // Add description field
+        timestamp: new Date().toISOString(),
+        issueId: issue._id
+      });
       await user.save();
     }
 
@@ -103,6 +109,8 @@ router.post('/api/issues/:id/reply', async (req, res) => {
     res.status(500).send(`Failed to reply to the issue: ${error.message}`);
   }
 });
+
+
 
 
 

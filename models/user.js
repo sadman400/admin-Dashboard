@@ -2,7 +2,8 @@
 const mongoose = require('mongoose');
 
 const replySchema = new mongoose.Schema({
-  message: String,
+  ans: String,
+  question: String,
   timestamp: {
     type: Date,
     default: Date.now

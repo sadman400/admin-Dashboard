@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const replySchema = new mongoose.Schema({
-  message: String,
+  ans: String,
+  question: String, // Add description field
   timestamp: {
     type: Date,
     default: Date.now
