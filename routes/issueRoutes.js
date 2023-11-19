@@ -10,6 +10,7 @@ const router = express.Router();
 // POST AN ISSUE 
 router.post('/api/issues', async (req, res) => {
   try {
+    // console.log('Request Body:', req.body);
     const { error } = validateIssue(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     
@@ -28,6 +29,7 @@ router.post('/api/issues', async (req, res) => {
     await newIssue.save();
     res.send(newIssue);
   } catch (error) {
+    // console.log(error);
     res.status(500).send('Failed to create an issue');
   }
 });
@@ -59,6 +61,7 @@ router.get('/api/issues/:id', async (req, res) => {
 
     res.send(issue);
   } catch (error) {
+
     res.status(500).send('Failed to get the issues');
   }
 })
@@ -119,34 +122,34 @@ router.post('/api/issues/:id/reply', async (req, res) => {
 
 
 // UPDATE ISSUE 
-router.put('/api/issues/:id/status', async (req, res) => {
-  try {
-    const { error } = Joi.object({ status: Joi.string().valid('pending', 'acknowledged', 'in-progress', 'resolved') }).validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+// router.put('/api/issues/:id/status', async (req, res) => {
+//   try {
+//     const { error } = Joi.object({ status: Joi.string().valid('pending', 'acknowledged', 'in-progress', 'resolved') }).validate(req.body);
+//     if (error) return res.status(400).send(error.details[0].message);
 
-    const issue = await Issue.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
+//     const issue = await Issue.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
 
-    if (!issue) return res.status(404).send('Issue not found');
-    res.send(issue);
-  } catch (error) {
-    res.status(500).send('Failed to update issue status');
-  }
-});
+//     if (!issue) return res.status(404).send('Issue not found');
+//     res.send(issue);
+//   } catch (error) {
+//     res.status(500).send('Failed to update issue status');
+//   }
+// });
 
 
 
 // COMMUNICATION WITH USER 
-router.post('/api/communication', async (req, res) => {
-  try {
-    const { issueId, sender, receiver, message } = req.body;
+// router.post('/api/communication', async (req, res) => {
+//   try {
+//     const { issueId, sender, receiver, message } = req.body;
 
-    // Reshad dadar lila 
+//     // Reshad dadar lila 
 
-    res.json({ issueId, sender, receiver, message, timestamp: new Date().toISOString() });
-  } catch (error) {
-    res.status(500).send('Failed to log communication');
-  }
-});
+//     res.json({ issueId, sender, receiver, message, timestamp: new Date().toISOString() });
+//   } catch (error) {
+//     res.status(500).send('Failed to log communication');
+//   }
+// });
 
 
 

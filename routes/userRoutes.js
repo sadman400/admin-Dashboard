@@ -9,6 +9,9 @@ const router = express.Router();
 // POST A USER 
 router.post('/api/users', async (req, res) => {
   try {
+
+    console.log('Request Body before validation:', req.body);
+
     const { error } = validateUser(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -22,6 +25,7 @@ router.post('/api/users', async (req, res) => {
     await newUser.save();
     res.send(newUser);
   } catch (error) {
+    console.log(error.message);
     res.status(500).send('Failed to create a user');
   }
 });

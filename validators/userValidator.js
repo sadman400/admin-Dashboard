@@ -1,18 +1,29 @@
 const Joi = require('joi');
 
 function validateUser(user) {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    user_replies: Joi.array().items(
-      Joi.object({
-        message: Joi.string().required(),
-        timestamp: Joi.date().default(Date.now, 'current date')
-      })
-    )
-  });
+  try {
+    console.log('Validating user:', user);
+    
+    const schema = Joi.object({
+      name: Joi.string().required(),
+      email: Joi.string().email().required(),
+      user_replies: Joi.array()
+      
+    });
 
-  return schema.validate(user);
+    const options = {
+      abortEarly: false,  // To collect all validation errors, not just the first one
+      allowUnknown: true  // To allow unknown fields in the input data
+    };
+
+    const result = schema.validate(user, options);
+    console.log('Validation result:', result);
+
+    return result;
+  } catch (error) {
+    console.error('Error during validation:', error);
+    throw error;
+  }
 }
 
 module.exports = validateUser;
